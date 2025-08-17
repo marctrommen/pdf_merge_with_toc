@@ -11,6 +11,8 @@ corresponding sections.
 
 import config
 
+
+from app import Application
 import logging
 from logging_config import setup_logging
 setup_logging()
@@ -27,6 +29,8 @@ def main() -> None:
     into the Application class."""
 
     configuration = config.configuration()
+    application = Application(configuration=configuration)
+    application.run()
 
 
 # -----------------------------------------------------------------------------

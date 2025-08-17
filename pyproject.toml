@@ -1,0 +1,19 @@
+[project]
+name = "pdf_merge_with_toc"
+description = "Merges multiple PDF files into a single document. The resulting file includes a table of contents on the first page, with clickable links to the corresponding sections."
+version = "0.1.0"
+readme = "README.md"
+authors = [
+    { name = "Marcus Trommen", email = "marcus.trommen@gmx.net" }
+]
+maintainers = [
+    { name = "Marcus Trommen", email = "marcus.trommen@gmx.net" }
+]
+license-files = ["LICENSE.txt"]
+keywords = ["pdf", "merge", "toc", "table of contents", "fpdf2", "pymupdf"]
+requires-python = ">=3.13"
+dependencies = [
+    "fpdf2>=2.8.4",
+    "pymupdf>=1.26.3",
+    "pyyaml>=6.0.2",
+]

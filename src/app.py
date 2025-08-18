@@ -141,7 +141,7 @@ class Application:
 
 
         self.pdf_document.set_font(family="Arial", style="B", size=16)
-        self.pdf_document.cell(w=0, h=10, text="Inhaltsverzeichnis", ln=True, align="C")
+        self.pdf_document.cell(w=0, h=10, text=self.data["PDF_DATA"]["toc_title"], ln=True, align="C")
 
         self.pdf_document.ln(10)
 
@@ -163,15 +163,11 @@ class Application:
 
             toc_text = f"{toc_entry} {dots}"
             self.pdf_document.cell(w=0, h=10, txt=toc_text, ln=0, link=target_link, align="L")
-            #self.pdf_document.cell(w=0, h=10, txt=dots, ln=0, link=target_link, align="L")
-            #page_number_position = toc_entry_width + double_space_width + (dots_fill_count * dot_width)
-            #logger.debug(f"Page number position: {page_number_position}")
-            #self.pdf_document.cell(page_number_position, h=10, txt=str(target_page_num), ln=True, align="R")
             self.pdf_document.cell(w=0, h=10, txt=str(target_page_num), ln=True, align="R")
             
         self.pdf_document.ln(10)
 
         self.pdf_document.set_font("Arial", style="I", size=10)
-        self.pdf_document.cell(w=0, h=10, txt="Klicken Sie auf die Einträge, um zu den entsprechenden Seiten zu springen.", ln=True, align="C")
+        self.pdf_document.cell(w=0, h=10, txt=self.data["PDF_DATA"]["toc_hint"], ln=True, align="C")
 
         logger.debug("Table of contents generated successfully")

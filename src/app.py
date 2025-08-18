@@ -39,7 +39,8 @@ class Application:
 
     # -----------------------------------------------------------------------------
     def _clean_up(self) -> None:
-        """Delete all created files in the build folder from previous run before creating new ones."""
+        """Delete all created files in the build folder from previous run before creating new ones.
+        Create the build and data directories if they do not exist."""
 
         logger.debug(f"Cleaning up previous output files in {self.data['BUILD_DIR']}")
 
@@ -53,6 +54,27 @@ class Application:
                         logger.debug(f"Removed existing file: {file_name}")
                     except OSError as error:
                         logger.error(f"Error removing file {file_path}: {error}")
+        
+        if not os.path.exists(self.data["BUILD_DIR"]):
+            try:
+                os.makedirs(self.data["BUILD_DIR"])
+                logger.debug(f"Created build directory: {self.data['BUILD_DIR']}")
+            except OSError as error:
+                logger.error(f"Error creating build directory {self.data['BUILD_DIR']}: {error}")
+        
+        if not os.path.exists(self.data["DATA_DIR"]):
+            try:
+                os.makedirs(self.data["DATA_DIR"])
+                logger.debug(f"Created data directory: {self.data['DATA_DIR']}")
+
+                if not os.path.exists(self.data["PRIVATE_DATA_DIR"]):
+                    try:
+                        os.makedirs(self.data["PRIVATE_DATA_DIR"])
+                        logger.debug(f"Created private data directory: {self.data['PRIVATE_DATA_DIR']}")
+                    except OSError as error:
+                        logger.error(f"Error creating private data directory {self.data['PRIVATE_DATA_DIR']}: {error}")
+            except OSError as error:
+                logger.error(f"Error creating data directory {self.data['DATA_DIR']}: {error}")
 
 
     # -----------------------------------------------------------------------------
@@ -73,7 +95,7 @@ class Application:
                 item["target_page_num"] = target_page_num
                 for page in doc:
                     pix = page.get_pixmap(dpi=self.data["PDF_DATA"]["resulting_pdf_file_dpi"], alpha=False)
-                    file_name = f"page_{target_page_num:02d}.png"
+                    file_name = f"page_{target_page_num:03d}.png"
                     if item["target_page_num"] == target_page_num:
                         item["page_file_name"] = file_name
                     image_path = os.path.join(self.data["BUILD_DIR"], file_name)
@@ -87,7 +109,10 @@ class Application:
         """Create a PDF file. This method initializes a PDF document and adds pages to it."""
         logger.debug("Creating PDF document")
 
-        self.pdf_document = FPDF(orientation="P", unit="mm", format="A4")
+        # Initialize the PDF document with specified orientation and page size
+        self.pdf_document = FPDF(orientation=self.data["PDF_DATA"]["resulting_pdf_file_page_orientation"], 
+                                 unit="mm", 
+                                 format=self.data["PDF_DATA"]["resulting_pdf_file_page_size"])
 
         self._generate_toc()
         self._create_pdf_from_images()

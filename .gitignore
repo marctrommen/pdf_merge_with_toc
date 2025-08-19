@@ -7,7 +7,7 @@ wheels/
 *.egg-info
 
 # private data
-data/zeugnisse/
+data/
 src/config.py
 
 # Virtual environments

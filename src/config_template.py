@@ -34,7 +34,6 @@ def configuration() -> dict:
     config["PROJECT_ROOT_DIR"] = aPath
     config["SRC_DIR"] = os.path.join( config["PROJECT_ROOT_DIR"], "src" )
     config["DATA_DIR"] = os.path.join( config["PROJECT_ROOT_DIR"], "data" )
-    config["PRIVATE_DATA_DIR"] = os.path.join( config["DATA_DIR"], "private" )
     config["BUILD_DIR"] = os.path.join( config["PROJECT_ROOT_DIR"], "build" )
     config["TEST_DIR"] = os.path.join( config["PROJECT_ROOT_DIR"], "test" )
 

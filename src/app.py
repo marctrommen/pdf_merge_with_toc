@@ -39,11 +39,18 @@ class Application:
 
     # -----------------------------------------------------------------------------
     def _clean_up(self) -> None:
-        """Delete all created files in the build folder from previous run before creating new ones.
-        Create the build and data directories if they do not exist."""
-
-        logger.debug(f"Cleaning up previous output files in {self.data['BUILD_DIR']}")
-
+        """Check if all necessary directories do exist and create them if not.
+        Delete all created files in the build folder from previous run before creating new ones."""
+        
+        logger.debug(f"Check if build directory ({self.data['BUILD_DIR']}) exists and create it if not")
+        if not os.path.exists(self.data["BUILD_DIR"]):
+            try:
+                os.makedirs(self.data["BUILD_DIR"])
+                logger.debug("Created build directory")
+            except OSError as error:
+                logger.error(f"Error creating build directory: {error}")
+        
+        logger.debug("Cleaning up previous output files in build directory")
         files = os.listdir(self.data["BUILD_DIR"])
         for file_name in files:
             file_path = os.path.join(self.data["BUILD_DIR"], file_name)
@@ -54,27 +61,15 @@ class Application:
                         logger.debug(f"Removed existing file: {file_name}")
                     except OSError as error:
                         logger.error(f"Error removing file {file_path}: {error}")
-        
-        if not os.path.exists(self.data["BUILD_DIR"]):
-            try:
-                os.makedirs(self.data["BUILD_DIR"])
-                logger.debug(f"Created build directory: {self.data['BUILD_DIR']}")
-            except OSError as error:
-                logger.error(f"Error creating build directory {self.data['BUILD_DIR']}: {error}")
-        
+
+        logger.debug(f"Check if data directory ({self.data['DATA_DIR']}) exists and create it if not")
         if not os.path.exists(self.data["DATA_DIR"]):
             try:
                 os.makedirs(self.data["DATA_DIR"])
-                logger.debug(f"Created data directory: {self.data['DATA_DIR']}")
+                logger.debug("Created data directory")
 
-                if not os.path.exists(self.data["PRIVATE_DATA_DIR"]):
-                    try:
-                        os.makedirs(self.data["PRIVATE_DATA_DIR"])
-                        logger.debug(f"Created private data directory: {self.data['PRIVATE_DATA_DIR']}")
-                    except OSError as error:
-                        logger.error(f"Error creating private data directory {self.data['PRIVATE_DATA_DIR']}: {error}")
             except OSError as error:
-                logger.error(f"Error creating data directory {self.data['DATA_DIR']}: {error}")
+                logger.error(f"Error creating data directory: {error}")
 
 
     # -----------------------------------------------------------------------------
@@ -86,7 +81,7 @@ class Application:
 
         target_page_num = 2 # Initialize page number as 1 is for toc
         for item in self.data["PDF_DATA"]["file_list_to_merge"]:
-            pdf_path = os.path.join(self.data["PRIVATE_DATA_DIR"], item["file_name"])
+            pdf_path = os.path.join(self.data["DATA_DIR"], item["file_name"])
 
             if os.path.isfile(pdf_path):
                 logger.debug(f"Processing PDF file: {item["file_name"]}")

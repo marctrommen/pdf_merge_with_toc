@@ -97,6 +97,9 @@ class Application:
                     pix.save(image_path)
                     target_page_num += 1
                     logger.debug(f"Saved image {file_name}")
+            else:
+                logger.error(f"PDF file not found: {pdf_path}")
+                raise FileNotFoundError(f"PDF file not found: {pdf_path}")
 
 
     # -----------------------------------------------------------------------------
